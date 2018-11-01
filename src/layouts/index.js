@@ -53,8 +53,16 @@ class UserCenterLayout extends Component {
       collapsed: !this.state.collapsed,
     });
   };
-  handleMenuOnClick = ({ item, key }) => {
-    router.push(`/${key.replace(/\//g,'%2F')}`);
+  handleMenuOnClick = (methodName, methodObj, path) => {
+    if (!path) return;
+    router.push({
+      pathname: `/${path.replace(/\//g,'%2F')}`,
+      state: {
+        name: methodName,
+        method: methodObj,
+        path,
+      }
+    });
   };
 
   renderSiderMenu = () => {
@@ -70,7 +78,7 @@ class UserCenterLayout extends Component {
                   Object.keys(paths).map(pathKey => {
                     return Object.keys(paths[pathKey]).map(methodKey => {
                       const method = paths[pathKey][methodKey];
-                      return method.tags.findIndex(t => t === tag.name) && <Menu.Item key={`${methodKey}-${pathKey}`}>{pathKey}  {method.summary}</Menu.Item>;
+                      return method.tags.findIndex(t => t === tag.name) && <Menu.Item onClick={() => this.handleMenuOnClick(methodKey, method, pathKey)} key={`${methodKey}-${pathKey}`}>{method.summary}</Menu.Item>;
                     })
                   })
                 }
@@ -85,12 +93,12 @@ class UserCenterLayout extends Component {
   render(){
     const { selectKey, menuMap } = this.state;
     return (
-      <Layout style={{ height: '100vh' }}>
+      <Layout style={{ minHeight: '100vh' }}>
         <Sider
           trigger={null}
           collapsible
           collapsed={this.state.collapsed}
-          width={248}
+          width={320}
         >
           <div className="swagger-logo">
             <img height="30" width="30" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAAYFBMVEUAAABUfwBUfwBUfwBUfwBUfwBUfwBUfwBUfwBUfwBUfwBUfwBUfwBUfwBUfwB0lzB/n0BfhxBpjyC0x4////+qv4CJp1D09++ft3C/z5/K16/U379UfwDf58/q79+Ur2D2RCk9AAAAHXRSTlMAEEAwn9//z3Agv4/vYID/////////////////UMeji1kAAAD8SURBVHgBlZMFAoQwDATRxbXB7f+vPKnlXAZn6k2cf3A9z/PfOC8IIYni5FmmABM8FMhwT17c9hnhiZL1CwvEL1tmPD0qSKq6gaStW/kMXanVmAVRDUlH1OvuuTINo6k90Sxf8qsOtF6g4ff1osP3OnMcV7d4pzdIUtu1oA4V0DZoKmxmlEYvtDUjjS3tmKmqB+pYy8pD1VPf7jPE0I40HHcaBwnue6fGzgyS5tXIU96PV7rkDWHNLV0DK4FkoKmFpN5oUnvi8KoeA2/JXsmXQuokx0siR1G8tLkN6eB9sLwJp/yymcyaP/TrP+RPmbMMixcJVgTR1aUZ93oGXsgXQAaG6EwAAAAASUVORK5CYII=" alt="Swagger UI" />
