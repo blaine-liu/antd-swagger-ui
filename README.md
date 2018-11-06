@@ -2,7 +2,7 @@
 
 基于Ant Design 组件库实现的美观、简洁的Swagger UI
 
-![](../screenshots/api.jpg)
+![](https://github.com/mldhnrtree/antd-swagger-ui/blob/master/screenshots/api.jpg)
 
 ## 功能计划
 
